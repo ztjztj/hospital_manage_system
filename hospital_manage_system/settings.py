@@ -24,7 +24,6 @@ SECRET_KEY = 'ib-ld&=mm@e(ip48+1^izc(!07&!$2&6tlqmb6cvs8js9f)$3o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
