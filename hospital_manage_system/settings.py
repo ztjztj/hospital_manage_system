@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'medicine_house',       # 药房（药物的去留）
     'pay_money_place',      # 缴费处（提供缴费账单，以及发放药品）
     'doctor',            # 医生（查看病人病历，提供药物清单，以及是否住院治疗）
-    'login_register'    # 登录注册以及密码修改
+    'login_register',    # 登录注册以及密码修改
+
 
 
 ]
@@ -120,7 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
