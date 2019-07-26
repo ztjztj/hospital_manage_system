@@ -7,11 +7,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://libs.baidu.com/jquery/1.10.2/jquery.min.js" crossorigin="anonymous">
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 {#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
     <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
+{#    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>#}
 
     <style type="text/css">
         body {
@@ -33,12 +36,13 @@
 
     </style>
     <script type="text/javascript">
-	 $(function () {
-		$('#newNav').click(function(){
-				window.location.href="{% url 'medicine_insert' %}";
-		 });
-    });
-	
+	{# $(function () {#}
+	{#	$('#newNav').click(function(){#}
+	{#			window.location.href="{% url 'medicine_insert' mid=meds.id %}";#}
+	{#	 });#}
+    {# });#}
+
+
     	function checkall(){
 			var alls=document.getElementsByName("check");
 			var ch=document.getElementById("checkall");
@@ -69,25 +73,36 @@
 			}
 		}
     </script>
+
+
 </head>
 <body>
 
-<form action="medicine_index.html" method="post" class="definewidth m20">
+{#<form action="medicine_index.html" method="get" class="definewidth m20">#}
+<form action="{% url 'medicine_house1' %}" method="post" class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">药品名称：</td>
-        <td><input type="text" name="pname" value=""/></td>
-		
+{#        <td><input type="text" name="pname" value="" /></td>#}
+        <td><input class='medname 'type="text" name="mecidine_name" value=""  required="required"/></td>
+
         <td width="10%" class="tableleft">药品类型：</td>
-        <td><select><option>中药</option><option>西药</option><option>处方</option><option>非处方</option></select></td>
+        <td><select name="selectmed"><option>外科</option><option>心血管科</option><option>急诊科</option><option>骨科</option></select></td>
     </tr>
     <tr>
 		
 		
 		  <td colspan="4">
 			<center>
-				<button type="submit" class="btn btn-primary" type="button">查询</button> 
-				<button type="submit" class="btn btn-primary" type="button">清空</button> 
+                <button type="submit" class="btn btn-primary" >查询</button>
+{#                <a href="{% url 'medicine_house1' %}" style="list-style: none"> </a>#}
+				<button type="reset" class="btn btn-primary" onclick="mclear()">清空</button>
+                  <script type="text/javascript">
+	//输入框的清空事件
+	function mclear(){
+	     $("#medname ").val("");  //根据id清空
+	}
+</script>
 			</center>
         </td>
     </tr>
@@ -95,6 +110,7 @@
 </form>
    
 <table class="table table-bordered table-hover definewidth m10" >
+
    <thead>
     <tr>
     	<th><input type="checkbox" id="checkall" onChange="checkall();"></th>
@@ -102,41 +118,66 @@
         <th>药品名称</th>
         <th>药品类型</th>
         <th>简单描述</th>
-        <th>状态</th>
+{#        <th>状态</th>#}
         <th>剩余量</th>
         <th>操作</th>
     </tr>
     </thead>
+ {% for med in meds %}
+
 
 	     <tr >
          	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">J1121</td>
-            <td style="vertical-align:middle;">感冒药</td>
-            <td style="vertical-align:middle;">处方</td>
-            <td style="vertical-align:middle;">用于普通感冒</td>
-            <td style="vertical-align:middle;">销售中</td>
-            <td style="vertical-align:middle;">1000袋</td>
+
+            <td style="vertical-align:middle;">{{ med.id }}</td>
+            <td style="vertical-align:middle;">{{ med.medicine_name }}</td>
+            <td style="vertical-align:middle;">{{ med.fk_medicine_type_department }}</td>
+            <td style="vertical-align:middle;">{{ med.medicine_message }}</td>
+
+{#             <td style="vertical-align:middle;">销售中</td>#}
+
+
+            <td style="vertical-align:middle;">{{ med.medicine_number }}袋</td>
+
                        <td style="vertical-align:middle;">
-					<a href="add.html">更改</a>&nbsp;&nbsp;&nbsp;
-					<a href="{% url 'medicine_insert' %}">添加库存</a>&nbsp;&nbsp;&nbsp;
-					<a href="{% url 'medicine_detail' %}">详情>>></a>
+					<a href="{% url 'medicine_update' mid=med.id%}">更改</a>&nbsp;&nbsp;&nbsp;
+{#					<a href="add.html">更改</a>&nbsp;&nbsp;&nbsp;#}
+					<a href="{% url 'medicine_insert' mid=med.id%}">添加库存</a>&nbsp;&nbsp;&nbsp;
+{#					<a href="{% url 'medicine_insert' %}">添加库存</a>&nbsp;&nbsp;&nbsp;#}
+					<a href="{% url 'medicine_detail' mid=med.id %}">详情>>></a>
 			</td>
         </tr>
-	   
+
+	     {% endfor %}
   </table>
-  
-  <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
-		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
-		  </div>
-		 <div>
-			<button type="button" class="btn btn-success" id="newNav">添加新药</button>
-			<button type="button" class="btn btn-success" id="delPro">导出Excel</button>			
-		 </div>
-		 
-		 </th></tr>
-  </table>
+{# <div class="inline pull-right page">#}
+{#          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>#}
+{#		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页#}
+
+{#  </div>#}
+ <table class="table table-bordered table-hover definewidth m10">
+   <ul class="pagination" >
+      <li style="width: 200px"><a href="?page=1 " >首页</a></li>
+  {% if meds.has_previous %}
+      <li><a href="?page={{ meds.previous_page_number }}">上一页</a></li>
+  {% endif %}
+  {% for num in meds.paginator.page_range %}
+      <li><a href="?page={{ num }}">{{ num }}</a></li>
+  {% endfor %}
+  {% if meds.has_next %}
+      <li><a href="?page={{ meds.next_page_number }}">下一页</a></li>
+  {% endif %}
+  {% if meds %}
+      <li><a href="?page={{ meds.paginator.num_pages }}">尾页</a></li>
+  {% endif %}
+{#      <a href="{% url 'new_medicine' %}"><button type="button" class="btn btn-success" id="newNav">添加新药</button></a>#}
+{#             <a href="{% url 'export_excel' %}"><button type="button" class="btn btn-success" id="delPro">导出Excel</button></a>#}
+
+  </ul>
+</table>
+
   
 </body>
 </html>
+    <a href="{% url 'new_medicine' %}"><button type="button" class="btn btn-success" id="newNav">添加新药</button></a>
+             <a href="{% url 'export_excel' %}"><button type="button" class="btn btn-success" id="delPro">导出Excel</button></a>

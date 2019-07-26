@@ -13,7 +13,7 @@
     <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/ckeditor.js' %}"></script>
- 
+
 
     <style type="text/css">
         body {
@@ -35,21 +35,21 @@
 
     </style>
 {#    <script type="text/javascript">#}
-{#    $(function () {       #}
+{#    $(function () {#}
 {#		$('#backid').click(function(){#}
 {#				window.location.href="{% url 'medicine_house' %}";#}
 {#		 });#}
 {#    });#}
 {#    </script>#}
+
 </head>
 <body>
-
 {#<form action="medicine_index.html" method="post" class="definewidth m20">#}
-<form action="{% url 'medicine_detail' mid=med2.id %}" method="post" class="definewidth m20">
+<form action="{% url 'medicine_update' mid=med3.id %}" method="post" class="definewidth m20" name="form">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">编号</td>
-        <td>{{ med2.id }}</td>
+        <td>{{ med3.id }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">图片</td>
@@ -57,23 +57,24 @@
     </tr>
     <tr>
         <td width="10%" class="tableleft">进价</td>
-        <td>{{ med2.medicine_enter_price }}元</td>
+{#        <td>{{ med3.medicine_enter_price }}元</td>#}
+        <td><input type="text" placeholder="{{ med3.medicine_enter_price }}"  name="medicine_enter_price" required="required"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">售价</td>
-        <td>{{ med2.medicine_outer_price }}元</td>
+        <td><input type="text" placeholder="{{ med3.medicine_outer_price }}" name="medicine_outer_price" required="required"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">药品名称</td>
-        <td>{{ med2.medicine_name }}</td>
+        <td><input type="text" placeholder="{{ med3.medicine_name }}" name="medicine_name" required="required"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">药品类型</td>
-        <td>{{ med2.fk_medicine_type_department }}</td>
+        <td>{{ med3.fk_medicine_type_department }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">简单描述</td>
-        <td>{{ med2.medicine_message }}</td>
+        <td>{{ med3.medicine_message }}</td>
     </tr>
 
     <tr>
@@ -82,7 +83,7 @@
     </tr>
     <tr>
         <td width="10%" class="tableleft">详细描述</td>
-        <td>{{ med2.medicine_message }}</td>
+        <td><input type="text" placeholder="{{ med3.medicine_message }}"  name="medicine_message1" required="required"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">生产厂商</td>
@@ -93,19 +94,12 @@
         <td>一次两粒一日三次</td>
     </tr>
     <tr>
-        {% if med3 %}
-            <td width="10%" class="tableleft">库存</td>
-        <td>{{med3}}</td>
-            {% else %}
-            <td width="10%" class="tableleft">库存</td>
-        <td>{{med2.medicine_number}}袋</td>
-
-        {% endif %}
-
+        <td width="10%" class="tableleft">库存</td>
+        <td>{{ med3.medicine_number }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">剩余量</td>
-        <td>{{ med2.medicine_number }}袋</td>
+        <td><input type="text" placeholder="{{ med3.medicine_number }}" value="" required oninvalid="setCustomValidity('请输入更新信息');" oninput="setCustomValidity('');"  name="medicine_number"></td>
     </tr>
 	<tr>
         <td width="10%" class="tableleft">备注</td>
@@ -115,7 +109,7 @@
         <td colspan="2">
 			<center>
 {#				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>#}
-                <a href="{% url 'medicine_house' %}" style="list-style: none;"><button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button></a>
+                <a href="{% url 'medicine_house' %}" style="list-style: none"><button type="submit" class="btn btn-success" name="backid" id="backid">确认更改</button></a>
 			</center>
 		</td>
     </tr>

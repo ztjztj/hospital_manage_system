@@ -9115,7 +9115,7 @@ define('bui/component/uibase/bindable',function(){
 			store.on('remove',function(e){
 				_self.onRemove(e);
 			});
-			store.on('update',function(e){
+			store.on('medicine_update.html',function(e){
 				_self.onUpdate(e);
 			});
 			store.on('localsort',function(e){
@@ -12337,7 +12337,7 @@ define('bui/data/abstractstore',['bui/common','bui/data/proxy'],function (requir
         * @param {Object} e.field \u66f4\u65b0\u7684\u5b57\u6bb5
         * @param {Object} e.value \u66f4\u65b0\u7684\u503c
         */
-        'update',
+        'medicine_update.html',
 
         /**  
         * \u524d\u7aef\u53d1\u751f\u6392\u5e8f\u65f6\u89e6\u53d1
@@ -12784,7 +12784,7 @@ define('bui/data/treestore',['bui/common','bui/data/node','bui/data/abstractstor
         * @param {jQuery.Event} e  \u4e8b\u4ef6\u5bf9\u8c61
         * @param {Object} e.node \u66f4\u65b0\u7684\u8282\u70b9
         */
-        'update',
+        'medicine_update.html',
         /**  
         * \u5f53\u5220\u9664\u6570\u636e\u65f6\u89e6\u53d1\u8be5\u4e8b\u4ef6
         * @event  
@@ -12942,7 +12942,7 @@ define('bui/data/treestore',['bui/common','bui/data/node','bui/data/abstractstor
      * @return {BUI.Data.Node} \u66f4\u65b0\u8282\u70b9
      */
     update : function(node){
-      this.fire('update',{node : node});
+      this.fire('medicine_update.html',{node : node});
     },
     /**
      * \u8fd4\u56de\u7f13\u5b58\u7684\u6570\u636e\uff0c\u6839\u8282\u70b9\u7684\u76f4\u63a5\u5b50\u8282\u70b9\u96c6\u5408
@@ -13808,7 +13808,7 @@ define('bui/data/store',['bui/data/proxy','bui/data/abstractstore','bui/data/sor
       if(!contains(record,_self.get('newRecords')) && !contains(record,_self.get('modifiedRecords'))){
           _self.get('modifiedRecords').push(record);
       }
-      _self.fire('update',{record:record,field:field,value:value});
+      _self.fire('medicine_update.html',{record:record,field:field,value:value});
     },
     /**
     * \u66f4\u65b0\u8bb0\u5f55 \uff0c\u89e6\u53d1 update\u4e8b\u4ef6
@@ -13837,7 +13837,7 @@ define('bui/data/store',['bui/data/proxy','bui/data/abstractstore','bui/data/sor
       if(!contains(record,_self.get('newRecords')) && !contains(record,_self.get('modifiedRecords'))){
           _self.get('modifiedRecords').push(record);
       }
-      _self.fire('update',{record:record});
+      _self.fire('medicine_update.html',{record:record});
     },
     //\u6dfb\u52a0\u7eaa\u5f55
     _addRecord :function(record,index){
@@ -31884,7 +31884,7 @@ define('bui/grid/plugins/summary',['bui/common'],function (require) {
         store.on('remove',function(){
           _self.resetPageSummary();
         });
-        store.on('update',function(){
+        store.on('medicine_update.html',function(){
           _self.resetPageSummary();
         });
       }
@@ -32818,7 +32818,7 @@ define('bui/grid/plugins/rowediting',['bui/common','bui/grid/plugins/editing'],f
         });
         BUI.mix(record,value);
         
-        store.update(record);
+        store.medicine_update(record);
     },
      /**
      * \u83b7\u53d6\u7f16\u8f91\u6b64\u5355\u5143\u683c\u7684\u7f16\u8f91\u5668
@@ -33087,7 +33087,7 @@ define('bui/grid/plugins/dialogediting',['bui/common'],function (require) {
           store.add(curRecord);
         }
       }else{
-        store.update(curRecord);
+        store.medicine_update(curRecord);
       }
     },
     /**
