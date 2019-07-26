@@ -104,7 +104,7 @@
         <td width="10%" class="tableleft">挂号编号/姓名：</td>
         <td><input type="text" name="patient_keyword"/>
         <button type="submit" class="btn btn-primary">查询</button>
-        {{ msg }}</td>
+        {{ patient_msg }}</td>
     </tr>
 </table>
 </form>
@@ -146,16 +146,21 @@
 <table class="table table-bordered table-hover definewidth m10" >
     <tr><th colspan="5">
         <div class="inline pull-right page">
-            <a href='#' >第一页</a> <a href='#'>上一页</a>
-            <span class='current'>1</span>
-            <a href='#'>2</a>
-            <a href='#'>3</a>
-            <a href='#'>4</a>
-            <a href='#'>5</a>
-            <a href='#' >下一页</a>
-            <a href='#' >最后一页</a>
-          &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录
-            <span class='current'> 1/33 </span>页
+            {% if patients %}
+                <a href='?page=1' >首页</a>
+                {% if patients.has_previous %}
+                    <a href='?page={{ patients.previous_page_number }}'>上一页</a>
+                {% endif %}
+                {% for num in patients.paginator.page_range %}
+                    <a href='?page={{ num }}'>{{ num }}</a>
+                {% endfor %}
+                {% if patients.has_next %}
+                    <a href='?page={{ patients.next_page_number }}' >下一页</a>
+                {% endif %}
+                {% if patients %}
+                    <a href='?page={{ patients.paginator.num_pages }}' >尾页</a>
+                {% endif %}
+            {% endif %}
         </div>
 
         <div>
@@ -169,12 +174,12 @@
 <hr>
 
 {#第一个div#}
-<form action="#" method="post" class="definewidth m20">
+<form action="{% url 'doctor_keyword' %}" method="post" class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">医生编号/姓名：</td>
-        <td><input type="text" name="doctor_keyword" value=""/>
-        <button type="submit" class="btn btn-primary">查询</button></td>
+        <td><input type="text" name="doctor_keyword" value="" id="patient"/>
+        <button type="submit" class="btn btn-primary">查询</button>{{ doctor_msg }}</td>
     </tr>
 </table>
 </form>
@@ -192,6 +197,7 @@
         <th>操作</th>
     </tr>
     </thead>
+    {% block find_doctor %}
     <tr>
     {% for depart in departs %}
         <td rowspan="{{ depart.id|doctors_count }}">{{ depart.depart_name }}</td>
@@ -209,27 +215,12 @@
         {% endfor %}
 
     {% endfor %}
-</tr>
+    </tr>
+    {% endblock %}
 </table>
 
 
 
-<table class="table table-bordered table-hover definewidth m10" >
-    <tr><th colspan="5">
-        <div class="inline pull-right page">
-            <a href='#' >第一页</a> <a href='#'>上一页</a>
-            <span class='current'>1</span>
-            <a href='#'>2</a>
-            <a href='#'>3</a>
-            <a href='#'>4</a>
-            <a href='#'>5</a>
-            <a href='#' >下一页</a>
-            <a href='#' >最后一页</a>
-          &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录
-            <span class='current'> 1/33 </span>页
-        </div>
-    </th></tr>
-</table>
 
 
 <div><hr></div>

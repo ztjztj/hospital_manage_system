@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.http import JsonResponse
 from registration.models import *
-from registration.forms import *
 from django.db.models import Q
+import re,openpyxl
+from django.core.paginator import Paginator
 
 
 # 首页
@@ -10,13 +11,32 @@ def index(request):
     return render(request,'registration/index.html')
 
 
-# 挂号的首页
+# 挂号的首页（包含医生与病人）
 def registration_index(request):
     patients = PatientOne.objects.all()
     doctors=Doctor.objects.all()
     departs=Department.objects.all()
+    limit=5
+    paginator=Paginator(patients,limit)
+    page=request.GET.get("page","1")
+    patients=paginator.page(page)
     return render(request,'registration/registration_index.html',{"doctors":doctors,'patients':patients,"departs":departs})
 
+# def outer_excel(request):
+#     content=2
+#     f=openpyxl.Workbook()
+#     d=f.active
+#     d.title='挂号情况'
+#     for i in range(0,len(content)):
+#         for j in range(0,len(content[i])):
+#             d.cell(i+1,j+1,str(content[i][j]))
+#     f.save(r'two.xlsx')
+#     f=open(r'two.xlsx','rb')
+#     h=HttpResponse()
+#     h.content=f
+#     h['Content-TYpe']="application/octet-stream"
+#     h['Content-Disposition']='attachment;filename="two.xlsx"'
+#     return h
 
 # 添加挂号
 def registration_add(request):
@@ -165,19 +185,21 @@ def patient_keyword(request):
         patients = PatientOne.objects.all()
         doctors = Doctor.objects.all()
         departs = Department.objects.all()
-        return render(request, 'registration/registration_index.html', {"msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
-    elif PatientOne.objects.filter(Q(patient_name__contains=keyword)|Q(id__contains=keyword)).exists():
-        patients=PatientOne.objects.filter(Q(patient_name__contains=keyword)|Q(id__iexact=keyword))
+        return render(request, 'registration/registration_index.html', {"patient_msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
+    elif PatientOne.objects.filter(Q(patient_name=keyword)|Q(id__contains=keyword)).exists():
+        patients=PatientOne.objects.filter(Q(patient_name=keyword)|Q(id__iexact=keyword))
         doctors = Doctor.objects.all()
         departs = Department.objects.all()
-        return render(request,'registration/registration_index.html',{"patients":patients,"doctors":doctors,"departs":departs})
+        return render(request,'registration/registration_index.html',{"patients":patients,"doctors":doctors, "departs": departs})
     else:
         msg = "数据不符合查询条件!"
         patients = PatientOne.objects.all()
         doctors = Doctor.objects.all()
         departs = Department.objects.all()
-        return render(request, 'registration/registration_index.html', {"msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
+        return render(request, 'registration/registration_index.html', {"patient_msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
 
+
+# 医生关键字查询
 def doctor_keyword(request):
     keyword=request.POST.get("doctor_keyword")
     if keyword=="":
@@ -185,20 +207,22 @@ def doctor_keyword(request):
         patients = PatientOne.objects.all()
         doctors = Doctor.objects.all()
         departs = Department.objects.all()
-        return render(request, 'registration/registration_index.html', {"msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
-    elif Doctor.objects.filter(Q(fk_doctor_user__user_name__contains=keyword)|Q(id__icontains=keyword)).exists():
-        doctors=UserInfo.objects.filter(Q(user_name__contains=keyword)|Q(id__contains=keyword))
-        pass
-        # 医生查询
-
+        return render(request, 'registration/registration_index.html', {"doctor_msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
+    elif UserInfo.objects.filter(Q(user_name=keyword)|Q(id__contains=keyword)|Q(doctor_belong__depart_name=keyword)|Q(doctor__doctor_status=keyword)):
+        doctors=Doctor.objects.filter(Q(fk_doctor_user__user_name=keyword)|Q(fk_doctor_user__id__contains=keyword)|Q(fk_doctor_user__doctor_belong__depart_name=keyword)|Q(doctor_status=keyword))
+        departs=doctors.values_list('fk_doctor_user__doctor_belong__depart_name').distinct()
+        departs=[i[0]for i in list(departs)]
+        print(departs)
+        count=len(departs)+1
         patients = PatientOne.objects.all()
-        return render(request,'registration/registration_index.html',{"patients":patients,"doctors":doctors,"departs": departs})
+        return render(request,'registration/registration_index2.html',{"patients":patients,"doctors":doctors,"departs": departs,"count":count})
     else:
         msg = "数据不符合查询条件!"
         patients = PatientOne.objects.all()
         doctors = Doctor.objects.all()
         departs = Department.objects.all()
-        return render(request, 'registration/registration_index.html', {"msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
+        return render(request, 'registration/registration_index.html', {"doctor_msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
+
 
 def patients_exit(request):
     id_list=request.POST.getlist("id_list")
@@ -208,7 +232,26 @@ def patients_exit(request):
     return JsonResponse({"id_list":id_list})
 
 
-
 # 修改密码
 def registration_password(request):
-    return render(request,'registration/registration_password.html')
+    u=request.session.get("u_id")
+    if request.method=="GET":
+        return render(request, 'registration/registration_password.html')
+    else:
+        old_password=request.POST.get("old_password")
+        new_password=request.POST.get("new_password")
+        new_password2=request.POST.get("new_password2")
+        if UserInfo.objects.get(id=u.id).user_password==old_password:
+            user=UserInfo.objects.get(id=u.id)
+            if new_password==new_password2:
+                user.user_password=new_password2
+                user.save()
+                login_msg="请重新登录"
+                return JsonResponse({"status":"success","login_msg":login_msg})
+            else:
+                password_msg="密码输入不不正确"
+                return JsonResponse({"status": "error_msg", "password_msg":password_msg})
+        else:
+            error_msg="密码错误"
+            return JsonResponse({"status":"not_exits","error_msg":error_msg})
+
