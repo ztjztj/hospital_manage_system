@@ -13,4 +13,5 @@ urlpatterns = [
     path("patient_keyword/",views.patient_keyword,name="patient_keyword"),
     path("doctor_keyword/",views.doctor_keyword,name="doctor_keyword"),
     path("registration_password/",views.registration_password,name="registration_password"),
+    path("to_excel/",views.to_excel,name="to_excel")
 ]

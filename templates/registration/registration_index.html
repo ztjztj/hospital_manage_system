@@ -54,7 +54,6 @@
 			}
 		}
 		function delAll(){
-
 			var alls=document.getElementsByName("check");
 			var ids=new Array();
 			for(var i=0;i<alls.length;i++){
@@ -63,53 +62,59 @@
 				}		
 			}
 			if(ids.length>0){
-				$.ajax({
+			    if(confirm("确认操作?")){
+                   $.ajax({
                 url:'{% url 'patients_exit' %}',
                 type:'post',
                 data:{"id_list":ids.toString()},
                 success:function (data) {
                     for (var i in data.id_list){
                         $('#patient_tr_'+data.id_list[i]).remove()
+                        }
                     }
+			        })
                 }
-			})}
+				}
 			else{
 				alert("请选中要操作的项");
 			}
 		}
 		function patient_exit(id) {
-    	    $.ajax({
+    	    if(confirm("确认操作?")){
+               $.ajax({
                 url:"{% url 'patient_exit'%}",
                 type:"post",
                 datatype:'json',
                 data:{
                     "patient_id":id
                 },
-                success:function(){
+                success:function(data){
                     $('#patient_tr_'+data.patient_id).remove()
+
                 }
             })
+            }
+
         }
+
 
     </script>
 </head>
 <body>
 
-
-
-{#第二个div#}
-<form action="{% url 'patient_keyword' %}" method="post" class="definewidth m20">
+{#病人查询#}
+<form action="{% url 'patient_keyword'  %}" method="get" class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">挂号编号/姓名：</td>
-        <td><input type="text" name="patient_keyword"/>
+        <td><input type="text" name="patient_keyword" value="{{ keyword }}"/>
         <button type="submit" class="btn btn-primary">查询</button>
         {{ patient_msg }}</td>
     </tr>
 </table>
 </form>
 
-
+{#病人列表#}
 <table class="table table-bordered table-hover definewidth m10" >
    <thead>
     <tr>
@@ -142,7 +147,7 @@
 
   </table>
 
-
+{#病人翻页#}
 <table class="table table-bordered table-hover definewidth m10" >
     <tr><th colspan="5">
         <div class="inline pull-right page">
@@ -166,14 +171,15 @@
         <div>
             <button type="button" class="btn btn-success" id="newNav">门诊挂号</button>&nbsp;&nbsp;&nbsp;
             <button type="button" class="btn btn-success" id="delPro" onclick="delAll()">退号</button>&nbsp;&nbsp;&nbsp;
-            <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
+            <a type="button" class="btn btn-success" id="delPro" href="{% url 'to_excel' %}">导出Excel</a>
         </div>
     </th></tr>
 </table>
 
 <hr>
 
-{#第一个div#}
+
+{#查询医生#}
 <form action="{% url 'doctor_keyword' %}" method="post" class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
@@ -184,7 +190,7 @@
 </table>
 </form>
 
-
+{#医生表#}
 <table class="table table-bordered table-hover definewidth m10" >
     <thead>
     <tr>
@@ -218,11 +224,5 @@
     </tr>
     {% endblock %}
 </table>
-
-
-
-
-
-<div><hr></div>
 </body>
 </html>

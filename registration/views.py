@@ -22,21 +22,27 @@ def registration_index(request):
     patients=paginator.page(page)
     return render(request,'registration/registration_index.html',{"doctors":doctors,'patients':patients,"departs":departs})
 
-# def outer_excel(request):
-#     content=2
-#     f=openpyxl.Workbook()
-#     d=f.active
-#     d.title='挂号情况'
-#     for i in range(0,len(content)):
-#         for j in range(0,len(content[i])):
-#             d.cell(i+1,j+1,str(content[i][j]))
-#     f.save(r'two.xlsx')
-#     f=open(r'two.xlsx','rb')
-#     h=HttpResponse()
-#     h.content=f
-#     h['Content-TYpe']="application/octet-stream"
-#     h['Content-Disposition']='attachment;filename="two.xlsx"'
-#     return h
+
+def to_excel(request):
+    patients=PatientOne.objects.all()
+    content=[["病人编号","病人姓名","病人性别","挂号科室","主治医生","挂号时间"]]
+    for patient in patients:
+        content.append([patient.id,patient.patient_name,patient.patient_sex,patient.fk_patient_depart.depart_name,patient.fk_patient_doctor.fk_doctor_user.user_name,patient.patient_registed_time])
+    print(content)
+    f=openpyxl.Workbook()
+    d=f.active
+    d.title='挂号情况'
+    for i in range(0,len(content)):
+        for j in range(0,len(content[i])):
+            d.cell(i+1,j+1,str(content[i][j]))
+    f.save(r'a.xlsx')
+    f=open(r'a.xlsx','rb')
+    h=HttpResponse()
+    h.content=f
+    h['Content-TYpe']="application/octet-stream"
+    h['Content-Disposition']='attachment;filename="a.xlsx"'
+    return h
+
 
 # 添加挂号
 def registration_add(request):
@@ -135,7 +141,6 @@ def registration_add(request):
             patient_history=request.POST.get("patient_history")
             patient_depart = request.POST.getlist("patient_depart")[0]
             patient_main_doctor=request.POST.getlist("patient_main_doctor")[0]
-            print(patient_main_doctor,patient_depart)
             patient_main_doctor=UserInfo.objects.get(user_name=patient_main_doctor).id
             PatientOne.objects.create(patient_name=patient_name,patient_age=patient_age,patient_card=patient_card,patient_history=patient_history,patient_status=patient_status,patient_sex=patient_sex,patient_phone=patient_phone,fk_patient_doctor_id=patient_main_doctor,fk_patient_depart_id=patient_depart)
             doctor=Doctor.objects.get(fk_doctor_user_id=patient_main_doctor)
@@ -157,9 +162,7 @@ def patient_look(request,patient_id):
 
 # 医生详情
 def doctor_look(request,doctor_id):
-    print(doctor_id)
     doctor=Doctor.objects.get(id=doctor_id)
-    print(doctor.fk_doctor_user.user_name)
     return render(request, 'registration/doctor_look.html', {"doctor":doctor})
 
 
@@ -177,25 +180,36 @@ def patient_exit(request):
 
 # 病人关键字查询
 def patient_keyword(request):
-    keyword=request.POST.get("patient_keyword")
-    n = PatientOne.objects.filter(patient_name=keyword)
-    print("n", n)
+    keyword=request.GET.get("patient_keyword")
+    print(keyword)
     if keyword=="":
         msg="不能为空!"
         patients = PatientOne.objects.all()
         doctors = Doctor.objects.all()
         departs = Department.objects.all()
-        return render(request, 'registration/registration_index.html', {"patient_msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
+        limit = 5
+        paginator = Paginator(patients, limit)
+        page = request.GET.get("page", "1")
+        patients = paginator.page(page)
+        return render(request, 'registration/registration_index.html', {"patient_msg": msg,"patients":patients,"doctors":doctors,"departs":departs,"keyword":keyword})
     elif PatientOne.objects.filter(Q(patient_name=keyword)|Q(id__contains=keyword)).exists():
         patients=PatientOne.objects.filter(Q(patient_name=keyword)|Q(id__iexact=keyword))
         doctors = Doctor.objects.all()
         departs = Department.objects.all()
+        limit = 5
+        paginator = Paginator(patients, limit)
+        page = request.GET.get("page", "1")
+        patients = paginator.page(page)
         return render(request,'registration/registration_index.html',{"patients":patients,"doctors":doctors, "departs": departs})
     else:
         msg = "数据不符合查询条件!"
         patients = PatientOne.objects.all()
         doctors = Doctor.objects.all()
         departs = Department.objects.all()
+        limit = 5
+        paginator = Paginator(patients, limit)
+        page = request.GET.get("page", "1")
+        patients = paginator.page(page)
         return render(request, 'registration/registration_index.html', {"patient_msg": msg,"patients":patients,"doctors":doctors,"departs":departs})
 
 
@@ -212,7 +226,6 @@ def doctor_keyword(request):
         doctors=Doctor.objects.filter(Q(fk_doctor_user__user_name=keyword)|Q(fk_doctor_user__id__contains=keyword)|Q(fk_doctor_user__doctor_belong__depart_name=keyword)|Q(doctor_status=keyword))
         departs=doctors.values_list('fk_doctor_user__doctor_belong__depart_name').distinct()
         departs=[i[0]for i in list(departs)]
-        print(departs)
         count=len(departs)+1
         patients = PatientOne.objects.all()
         return render(request,'registration/registration_index2.html',{"patients":patients,"doctors":doctors,"departs": departs,"count":count})
@@ -226,7 +239,6 @@ def doctor_keyword(request):
 
 def patients_exit(request):
     id_list=request.POST.getlist("id_list")
-    print(id_list)
     id_list=id_list[0].split(",")
     PatientOne.objects.filter(id__in=id_list).delete()
     return JsonResponse({"id_list":id_list})
