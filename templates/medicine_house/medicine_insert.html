@@ -37,43 +37,44 @@
     <script type="text/javascript">
     $(function () {       
 		$('#backid').click(function(){
-				window.location.href="{% url 'medicine_house_index' %}";
+				window.location.href="{% url 'medicine_house' %}";
 		 });
     });
     </script>
 </head>
 <body>
-<form action="medicine_index.html" method="post" class="definewidth m20">
+<form action="{% url 'medicine_insert' mid=med1.id %}" method="post" class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
+{#    {% for med in med1 %}#}
     <tr>
         <td width="10%" class="tableleft">药品编号</td>
-        <td>J1121</td>
+        <td>{{ med1.id }}</td>
     </tr> 
 	
     <tr>
         <td width="10%" class="tableleft">药品名称</td>
-        <td>感冒药</td>
+        <td>{{ med1.medicine_name }}</td>
     </tr>    
 	<tr>
         <td width="10%" class="tableleft">余量</td>
-        <td>300</td>
+        <td>{{ med1.medicine_number }}</td>
     </tr>    
 	
     <tr>
         <td width="10%" class="tableleft"><font color="red">*</font>数量</td>
         <td>
-			<input type="text" value="300" />
+			<input type="text" name="medicine_number" />
 		</td>
     </tr>
-	
 
     <tr>
         <td colspan="2">
 			<center>
 				<button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
-			</center
+			</center>
 		</td>
     </tr>
+{# {% endfor %}#}
 </table>
 </form>
 </body>

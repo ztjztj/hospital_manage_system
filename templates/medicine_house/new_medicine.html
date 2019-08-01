@@ -13,7 +13,7 @@
     <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/ckeditor.js' %}"></script>
- 
+
 
     <style type="text/css">
         body {
@@ -43,13 +43,12 @@
 {#    </script>#}
 </head>
 <body>
-
 {#<form action="medicine_index.html" method="post" class="definewidth m20">#}
-<form action="{% url 'medicine_detail' mid=med2.id %}" method="post" class="definewidth m20">
+<form action="{% url 'new_medicine'  %}" method="post" class="definewidth m20" id="myform">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">编号</td>
-        <td>{{ med2.id }}</td>
+        <td>  </td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">图片</td>
@@ -57,23 +56,52 @@
     </tr>
     <tr>
         <td width="10%" class="tableleft">进价</td>
-        <td>{{ med2.medicine_enter_price }}元</td>
+        <td><input type="text" name="new_enter_medicine" required="required">元</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">售价</td>
-        <td>{{ med2.medicine_outer_price }}元</td>
+        <td><input type="text" name="new_outer_medicine" required="required">元</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">药品名称</td>
-        <td>{{ med2.medicine_name }}</td>
+        <td><input type="text" name="new_name_medicine" required="required"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">药品类型</td>
-        <td>{{ med2.fk_medicine_type_department }}</td>
+
+    <td>
+
+        <select name="new_department_medicine">
+            {% for med in meds2 %}
+            <option>{{ med }}</option>
+              {% endfor %}
+        </select>
+{#        <td>‍‍<select id="pid" onchange="gradeChange()">#}
+
+    </td>
+
+{##}
+{#            <a href="#"><option grade="1" value="a" >骨科</a>#}
+{##}
+{#            <a href="#"><option grade="2" value="b">心血管科</a>#}
+{##}
+{#        </select></td>#}
+{##}
+{#<script type="text/JavaScript">#}
+{##}
+{#       function gradeChange(){#}
+{#        var objS = document.getElementById("pid");#}
+{#        var grade = objS.options[objS.selectedIndex].grade;#}
+{#        alert();#}
+{#        alert("123");#}
+{#       }#}
+{#</script>#}
+        {#        <td><input type="text" name="new_dpartment_medicine" required="required"></td>#}
+{#        <td><input type="text" name="new_dpartment_medicine" required="required"></td>#}
     </tr>
     <tr>
         <td width="10%" class="tableleft">简单描述</td>
-        <td>{{ med2.medicine_message }}</td>
+        <td><input type="text" name="new_message_medicine" required="required"></td>
     </tr>
 
     <tr>
@@ -93,19 +121,12 @@
         <td>一次两粒一日三次</td>
     </tr>
     <tr>
-        {% if med3 %}
-            <td width="10%" class="tableleft">库存</td>
-        <td>{{med3}}</td>
-            {% else %}
-            <td width="10%" class="tableleft">库存</td>
-        <td>{{med2.medicine_number}}袋</td>
-
-        {% endif %}
-
+        <td width="10%" class="tableleft">库存</td>
+        <td><input type="text" name="new_number_medicine" required="required"></td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">剩余量</td>
-        <td>{{ med2.medicine_number }}袋</td>
+        <td>{{ med2.medicine_number }}</td>
     </tr>
 	<tr>
         <td width="10%" class="tableleft">备注</td>
@@ -114,7 +135,7 @@
     <tr>
         <td colspan="2">
 			<center>
-{#				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>#}
+				<button type="submit" class="btn btn-success" name="backid" id="backid">确认增加</button>
                 <a href="{% url 'medicine_house' %}" style="list-style: none;"><button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button></a>
 			</center>
 		</td>
