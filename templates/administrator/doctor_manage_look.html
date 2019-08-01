@@ -43,64 +43,79 @@
     </script>
 </head>
 <body>
-<form action="index.html" method="post" class="definewidth m20">
+
+{#<form action="index.html" method="post" class="definewidth m20">#}
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
-        <td width="10%" class="tableleft">姓名</td>
-        <td>程俊</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>编号</td>
+        <td>{{ user.id }}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">证件类型</td>
-        <td>护照</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>姓名</td>
+        <td>{{ user.user_name }}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">证件号</td>
-        <td>534534534</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>性别</td>
+        <td>{{ user.user_gender }}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">手机</td>
-        <td>13124345432</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>年龄</td>
+        <td>{{ user.user_age }}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">座机</td>
-        <td>01068765432</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>学历</td>
+        <td>{{ user.user_level }}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">性别</td>
-        <td>男</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>角色</td>
+        <td>{{ role.role_name}}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">年龄</td>
-        <td>28</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>所属科室</td>
+        <td>{{ department.depart_name}}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">出生年月</td>
-        <td>1981-09-04</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>状态</td>
+        <td>{{ user.user_status }}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">电子邮箱</td>
-        <td>chengjun@msn.com.cn</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>身份证号</td>
+        <td>{{ user.user_card }}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">所属科室</td>
-        <td>急诊科</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>电话号码</td>
+        <td>{{ user.user_phone }}</td>
     </tr>
+
     <tr>
-        <td width="10%" class="tableleft">学历</td>
-        <td>本科</td>
+        <td width="10%" class="tableleft"><font color="red">*</font>电子邮箱</td>
+        <td>{{ user.user_email }}</td>
     </tr>
-	<tr>
-        <td width="10%" class="tableleft">备注</td>
-        <td>工作热情积极表现非常的优异</td>
-	</tr>
+
     <tr>
         <td colspan="2">
 			<center>
-				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
-			</center
+{#				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>#}
+                <a href="{% url 'doctor_manage' %}">
+                     <button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+                </a>
+                <a href="{% url 'doctor_manage_look_excel' user_id=user.id%}">
+                    <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
+                </a>
+			</center>
 		</td>
     </tr>
 </table>
-</form>
+{#</form>#}
+
 </body>
 </html>
