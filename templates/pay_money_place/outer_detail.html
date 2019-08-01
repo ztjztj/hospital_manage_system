@@ -4,9 +4,10 @@
 <head>
     <title>结算详细--中软高科-2015</title>
     <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" crossorigin="anonymous">
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 {#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
     <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
@@ -88,43 +89,24 @@
         <th>收费日期</th>
     </tr>
     </thead>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">心脏检查</td>
-            <td style="vertical-align:middle;">200</td>
-            <td style="vertical-align:middle;">2015-01-04 10:33:12</td>
-			</tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">心脏手术</td>
-            <td style="vertical-align:middle;">1600</td>
-            <td style="vertical-align:middle;">2015-01-04 12:33:12</td>
-			</tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">感冒药</td>
-            <td style="vertical-align:middle;">50</td>
-            <td style="vertical-align:middle;">2015-01-04 09:33:12</td>
-			</tr>
+
+        <tr >
+            <td style="vertical-align:middle;">{{ each_data.patient_card }}</td>
+            <td style="vertical-align:middle;">{{ each_data.patient_name }}</td>
+            <td style="vertical-align:middle;">{{ each_data.patient_medicine }}</td>
+            <td style="vertical-align:middle;">20</td>
+            <td style="vertical-align:middle;">{{ each_data.patient_one_enter_time|date:"Y-m-d H:i:s" }}</td>
+        </tr>
+
   </table>
   
   <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
-		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
-		  </div>
-		 <div>
-				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
-				<button type="button" class="btn btn-success" >导出excel</button>
-		 </div>
-		 
-		 </th></tr>
+  <div style="text-align: center">
+    <button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+      <a href="{% url 'export_detail' each_data.id %}"><button type="button" class="btn btn-success" >导出excel</button>.</a>
+  </div>
   </table>
-  
-  
+
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
         <td width="10%" class="tableleft">总花费：</td>

@@ -84,104 +84,43 @@
         <th>姓名</th>
         <th>药品名称</th>
         <th>药品数量</th>
-        <th>已发数量</th>
-        <th>未发数量</th>
+        <th>药品单价</th>
+        <th>药品总价</th>
         <th>操作</th>
+        <th>状态</th>
     </tr>
     </thead>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
+{#    {% for each_datum in each_data %}#}
+        <tr>
+            <td style="vertical-align:middle;">{{ each_data.mediacal_redord_NO }}</td>
+            <td style="vertical-align:middle;">{{ each_data.patient_name }}</td>
+            <td style="vertical-align:middle;">{{ each_data.drug_name }}</td>
+            <td style="vertical-align:middle;">{{ each_data.drug_number }}</td>
+            <td style="vertical-align:middle;">{{ s.medicine_outer_price }}</td>
+            <td style="vertical-align:middle;">{{ all_money }}</td>
+            <td style="vertical-align:middle;"><a href="{% url 'give_medicine' each_data.id %}">发全</a></td>
+            <td style="vertical-align:middle;">
+                {% if each_data.drug_status == False %}
+                    未发药
+                {% else %}
+                    已发药
+                {% endif %}
+            </td>
+{#                &nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>#}
         </tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
-        </tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
-        </tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
-        </tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
-        </tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
-        </tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
-        </tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
-        </tr>
-	     <tr >
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">黄飞鸿</td>
-            <td style="vertical-align:middle;">3402-九九感冒灵</td>
-            <td style="vertical-align:middle;">3</td>
-            <td style="vertical-align:middle;">2</td>
-            <td style="vertical-align:middle;">1</td>
-            <td style="vertical-align:middle;"><a href="#">发全</a>&nbsp;&nbsp;&nbsp;<a href="#">发1</a>&nbsp;&nbsp;&nbsp;<a href="#">发5</a>&nbsp;&nbsp;&nbsp;<a href="#">发30</a></td>
-        </tr>
+{#    {% endfor %}#}
   </table>
   
   <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
-		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
-		  </div>
+  	<tr>
+        <th colspan="5">
+            
 		 <div>
 				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
 		 </div>
 		 
-		 </th></tr>
+		 </th>
+    </tr>
   </table>
   
 </body>

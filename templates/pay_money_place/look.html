@@ -2,18 +2,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>录入住院信息--中软高科-2015</title>
+    <title>查看--中软高科-2015</title>
     <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 {#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
-    <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+   <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/ckeditor.js' %}"></script>
+{#    <script type="text/javascript" src="{% static 'js/ckeditor.js' %}"></script>#}
  
 
     <style type="text/css">
@@ -44,15 +43,11 @@
     </script>
 </head>
 <body>
-<form action="{% url 'enter_add' %}" method="post" class="definewidth m20">
+<form action="{% url 'enter_index' %}" method="post" class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
-        <td width="10%" class="tableleft"><font color="red">*</font>病历号</td>
-        <td><input type="text" name="card" value="{{ main_details.id }}" placeholder="输入病历号回车自动带出挂号人信息"/></td>
-    </tr>
-    <tr>
         <td width="10%" class="tableleft">姓名</td>
-        <td>{{ main_details.patient_name }}</td>
+        <td>{{ each_data.patient_name }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">证件类型</td>
@@ -60,53 +55,56 @@
     </tr>
     <tr>
         <td width="10%" class="tableleft">证件号</td>
-        <td>{{ main_details.patient_card }}</td>
+        <td>{{ each_data.patient_card }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">病历号</td>
+        <td>{{ each_data.id }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">联系电话</td>
-        <td>{{ main_details.patient_phone }}</td>
+        <td>{{ each_data.patient_phone }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">住院天数</td>
-        <td>{{ main_details.patient_live_day }}</td>
+        <td>{{ each_data.patient_live_day }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">性别</td>
-        <td><input type="radio" name="pname" value="" checked/>男&nbsp;&nbsp;&nbsp;<input type="radio" name="pname" value=""/>女</td>
+        <td>{{ each_data.patient_sex }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">年龄</td>
-        <td>{{ main_details.patient_age }}</td>
+        <td>{{ each_data.patient_age }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">病情</td>
-        <td><input type="radio" name="pname1" value="" checked/>初诊&nbsp;&nbsp;&nbsp;<input type="radio" name="pname1" value=""/>复诊</td>
+        <td>{{ each_data.patient_condition }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">过敏史</td>
-        <td>{{ main_details.patient_history }}</td>
+        <td>{{ each_data.patient_history }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">所挂科室</td>
-        <td>{{ main_details.fk_patient_depart.depart_name }}</td>
+        <td>{{ each_data.fk_patient_depart.depart_name }}</td>
+    </tr>
+    <tr>
+        <td width="10%" class="tableleft">指定医生</td>
+        <td>{{ each_data.fk_patient_doctor.fk_doctor_user.user_name }}</td>
+    </tr>
+	 <tr>
+        <td width="10%" class="tableleft">押金</td>
+        <td>{{ money.collect_money }}</td>
     </tr>
 	<tr>
-        <td width="10%" class="tableleft">指定医生</td>
-        <td>{{ main_details.fk_patient_doctor.fk_doctor_user.user_name }}
-        </td>
-	</tr>
-    <tr>
-        <td width="10%" class="tableleft">押金</td>
-        <td><input type="text" name="pmoney" value=""/></td>
-    </tr>
-    <tr>
         <td width="10%" class="tableleft">备注</td>
-        <td><input type="text" name="pname" value=""/></td>
-    </tr>
+        <td>{{ each_data.patient_message }}</td>
+	</tr>
     <tr>
         <td colspan="2">
 			<center>
-				<button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
 			</center>
 		</td>
     </tr>
