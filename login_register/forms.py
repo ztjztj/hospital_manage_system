@@ -1,5 +1,5 @@
 from django import forms
-from login_register.models import *
+from registration.models import *
 from django.core import validators
 import re
 

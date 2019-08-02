@@ -89,7 +89,7 @@ DATABASES = {
         'NAME':'hospital_manage_system',
         'USER':'root',
         'PASSWORD':'root',
-        'HOST':'127.0.0.1',
+        'HOST':'106.13.144.115',
         'PORT':'3306'
 
     }

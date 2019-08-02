@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,reverse,HttpResponse
-from pay_money_place.models import *
+from registration.models import *
 from openpyxl import Workbook
 import os
 from django.db.models import Q
@@ -104,9 +104,10 @@ def enter_add(request):
         main_details = PatientOne.objects.get(id=patient_card)
 
         patient_money = request.POST.get('pmoney')
+        print(patient_money)
         # print('patient_money',patient_money)
         if patient_money != '':
-            a = Money.objects.get(fk_patientone=patient_card)
+            a = Money.objects.get_or_create(fk_patientone_id=patient_card)
             print(a)
             a.collect_money = int(patient_money)
             a.save()

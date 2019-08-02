@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse
 from django.shortcuts import render
-from administrator.models import *
+from registration.models import *
 from django.db.models import F, Q
 import re, openpyxl
 import os

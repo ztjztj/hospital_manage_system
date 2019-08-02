@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect,reverse
-from doctor.models import *
+from registration.models import *
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from doctor.forms import *

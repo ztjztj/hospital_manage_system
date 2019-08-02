@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect,HttpResponse
 from django.http import JsonResponse
 from django import views
-from medicine_house.models import *
+from registration.models import *
 from xlwt import *
 from io import BytesIO,StringIO
 # import StringIO
