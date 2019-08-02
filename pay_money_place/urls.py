@@ -3,7 +3,7 @@ from django.urls import path,include
 from pay_money_place import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("", views.index, name="pay_money_place_index"),
     path("enter_index/", views.enter_index, name="enter_index"),
     path("outer_index/", views.outer_index, name="outer_index"),
     path("give_medicine_index/", views.give_medicine_index, name="give_medicine_index"),

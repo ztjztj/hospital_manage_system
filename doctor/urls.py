@@ -3,7 +3,7 @@ from django.urls import path,include
 from doctor import views
 
 urlpatterns = [
-    path("",views.index,name="index"),  # 主页
+    path("",views.index,name="doctor_index"),  # 主页
     path("find_0/",views.find_0,name="find_0"), # 查询信息植入sission
     path("query/",views.query,name="query"),  # 查询页
     path("patient_list/",views.patient_list,name="patient_list"),  # 所有 病例打印，并分页
