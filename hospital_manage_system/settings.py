@@ -24,7 +24,6 @@ SECRET_KEY = 'ib-ld&=mm@e(ip48+1^izc(!07&!$2&6tlqmb6cvs8js9f)$3o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -43,7 +42,8 @@ INSTALLED_APPS = [
     'medicine_house',       # 药房（药物的去留）
     'pay_money_place',      # 缴费处（提供缴费账单，以及发放药品）
     'doctor',            # 医生（查看病人病历，提供药物清单，以及是否住院治疗）
-    'login_register'    # 登录注册以及密码修改
+    'login_register',    # 登录注册以及密码修改
+
 
 
 ]
@@ -118,9 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -133,5 +133,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]

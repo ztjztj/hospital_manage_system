@@ -1,14 +1,15 @@
 {% load static %}
+{% load filter %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>门诊查询--中软高科-2015</title>
     <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
-{#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
+    <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min(1).js' %}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
@@ -61,82 +62,167 @@
 				}		
 			}
 			if(ids.length>0){
-				if(confirm("确认操作?")){
-					alert("成功!");
+			    if(confirm("确认操作?")){
+                   $.ajax({
+                url:'{% url 'patients_exit' %}',
+                type:'post',
+                data:{"id_list":ids.toString()},
+                success:function (data) {
+                    for (var i in data.id_list){
+                        $('#patient_tr_'+data.id_list[i]).remove()
+                        }
+                    }
+			        })
+                }
 				}
-			}else{
+			else{
 				alert("请选中要操作的项");
 			}
 		}
+		function patient_exit(id) {
+    	    if(confirm("确认操作?")){
+               $.ajax({
+                url:"{% url 'patient_exit'%}",
+                type:"post",
+                datatype:'json',
+                data:{
+                    "patient_id":id
+                },
+                success:function(data){
+                    $('#patient_tr_'+data.patient_id).remove()
+
+                }
+            })
+            }
+
+        }
+
+
     </script>
 </head>
 <body>
 
-<form action="registration_index.html" method="post" class="definewidth m20">
+{#病人查询#}
+<form action="{% url 'patient_keyword'  %}" method="get" class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
-        <td width="10%" class="tableleft">病历号：</td>
-        <td><input type="text" name="pname" value=""/></td>
-		
-        <td width="10%" class="tableleft">主治医生：</td>
-        <td><input type="text" name="pname" value=""/></td>
-		
-        <td width="10%" class="tableleft">科室：</td>
-        <td><input type="text" name="pname" value=""/></td>
-    </tr>
-    <tr>
-		
-        <td width="10%" class="tableleft">挂号时间：</td>
-		
-		  <td colspan="5">
-			<input type="text" name="pname" value=""/>&nbsp;至&nbsp;<input type="text" name="pname" value=""/>
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button type="submit" class="btn btn-primary" type="button">查询</button> 
-            <button type="submit" class="btn btn-primary" type="button">清空</button> 
-			
-        </td>
+        <td width="10%" class="tableleft">挂号编号/姓名：</td>
+        <td><input type="text" name="patient_keyword" value="{{ keyword }}"/>
+        <button type="submit" class="btn btn-primary">查询</button>
+        {{ patient_msg }}</td>
     </tr>
 </table>
 </form>
-   
+
+{#病人列表#}
 <table class="table table-bordered table-hover definewidth m10" >
    <thead>
     <tr>
-    	<th><input type="checkbox" id="checkall" onChange="checkall();"></th>
-        <th>门诊编号</th>
+        <th></th>
+        <th>病人编号</th>
+        <th>病人姓名</th>
+        <th>病人性别</th>
+        <th>挂号科室</th>
         <th>主治医生</th>
         <th>挂号时间</th>
-        <th>挂号科室</th>
-        <th>状态</th>
         <th>操作</th>
     </tr>
     </thead>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">程俊</td>
-            <td style="vertical-align:middle;">2015-09-09 12：12：12</td>
-            <td style="vertical-align:middle;">血液科</td>
-            <td style="vertical-align:middle;">已挂号</td>
-            <td style="vertical-align:middle;"><a href="{% url 'registration_look' %}">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="{% url 'registration_edit' %}">更改</a>&nbsp;&nbsp;&nbsp;<a href="javascript:alert('退号成功！');">退号</a></td>
-        </tr>
+    {% for patient in patients %}
+    <tr id="patient_tr_{{ patient.id }}">
+        <td style="vertical-align:middle;"><input type="checkbox" name="check" value="{{ patient.id }}" class="check_box"></td>
+        <td style="vertical-align:middle;" id="patient_id">{{ patient.id }}</td>
+        <td style="vertical-align:middle;">{{ patient.patient_name }}</td>
+        <td style="vertical-align:middle;">{{ patient.patient_sex }}</td>
+        <td style="vertical-align:middle;">{{ patient.fk_patient_depart.depart_name }}</td>
+        <td style="vertical-align:middle;">{{ patient.fk_patient_doctor.fk_doctor_user.user_name }}</td>
+        <td style="vertical-align:middle;">{{ patient.patient_registed_time }}</td>
+        <td style="vertical-align:middle;">
+            <a href="{% url 'patient_look' patient_id=patient.id%}">详情&nbsp;&nbsp;</a>
+            <a href="javascript:patient_exit({{ patient.id }})">退号</a>
+        </td>
+    </tr>
+    {% endfor %}
+
 
   </table>
-  
-  <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
-		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
-		  </div>
-		 <div><button type="button" class="btn btn-success" id="newNav">门诊挂号</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" id="delPro" onClick="delAll();">退号</button>&nbsp;&nbsp;&nbsp;
-		 <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
-		
-		 
-		 </div>
-		 
-		 </th></tr>
-  </table>
-  
+
+{#病人翻页#}
+<table class="table table-bordered table-hover definewidth m10" >
+    <tr><th colspan="5">
+        <div class="inline pull-right page">
+            {% if patients %}
+                <a href='?page=1' >首页</a>
+                {% if patients.has_previous %}
+                    <a href='?page={{ patients.previous_page_number }}'>上一页</a>
+                {% endif %}
+                {% for num in patients.paginator.page_range %}
+                    <a href='?page={{ num }}'>{{ num }}</a>
+                {% endfor %}
+                {% if patients.has_next %}
+                    <a href='?page={{ patients.next_page_number }}' >下一页</a>
+                {% endif %}
+                {% if patients %}
+                    <a href='?page={{ patients.paginator.num_pages }}' >尾页</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div>
+            <button type="button" class="btn btn-success" id="newNav">门诊挂号</button>&nbsp;&nbsp;&nbsp;
+            <button type="button" class="btn btn-success" id="delPro" onclick="delAll()">退号</button>&nbsp;&nbsp;&nbsp;
+            <a type="button" class="btn btn-success" id="delPro" href="{% url 'to_excel' %}">导出Excel</a>
+        </div>
+    </th></tr>
+</table>
+
+<hr>
+
+
+{#查询医生#}
+<form action="{% url 'doctor_keyword' %}" method="post" class="definewidth m20">
+<table class="table table-bordered table-hover definewidth m10">
+    <tr>
+        <td width="10%" class="tableleft">医生编号/姓名：</td>
+        <td><input type="text" name="doctor_keyword" value="" id="patient"/>
+        <button type="submit" class="btn btn-primary">查询</button>{{ doctor_msg }}</td>
+    </tr>
+</table>
+</form>
+
+{#医生表#}
+<table class="table table-bordered table-hover definewidth m10" >
+    <thead>
+    <tr>
+        <th>科室</th>
+        <th>医生编号</th>
+        <th>医生姓名</th>
+        <th>医生性别</th>
+        <th>状态</th>
+        <th>挂号人数</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    {% block find_doctor %}
+    <tr>
+    {% for depart in departs %}
+        <td rowspan="{{ depart.id|doctors_count }}">{{ depart.depart_name }}</td>
+        {% for doctor in depart.id|depart_doctors %}
+            <tr>
+                <td style="vertical-align:middle;">{{ doctor.fk_doctor_user_id }}</td>
+                <td style="vertical-align:middle;">{{ doctor.fk_doctor_user.user_name }}</td>
+                <td style="vertical-align:middle;">{{ doctor.fk_doctor_user.user_gender }}</td>
+                <td style="vertical-align:middle;">{{ doctor.doctor_status }}</td>
+                <td style="vertical-align:middle;">{{ doctor.waiting_number }}</td>
+                <td style="vertical-align:middle;">
+                    <a href="{% url 'doctor_look' doctor_id=doctor.id%}">详情>>></a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    {% endfor %}
+    </tr>
+    {% endblock %}
+</table>
 </body>
 </html>

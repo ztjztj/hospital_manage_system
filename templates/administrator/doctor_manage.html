@@ -1,14 +1,16 @@
 {% load static %}
+{% load filters %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>门诊医生--中软高科-2015</title>
+    {#    加载过滤器#}
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
-{#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
+    {#    <script type="text/javascript" src="../Js/jquery.sorted.js"></script>#}
     <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/ckform.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/common.js' %}"></script>
@@ -17,6 +19,7 @@
         body {
             padding-bottom: 40px;
         }
+
         .sidebar-nav {
             padding: 9px 0;
         }
@@ -33,100 +36,205 @@
 
     </style>
     <script type="text/javascript">
-	 $(function () {
-		$('#newNav').click(function(){
-				window.location.href="{% url 'doctor_manage_add' %}";
-		 });
-    });
-	
-    	function checkall(){
-			var alls=document.getElementsByName("check");
-			var ch=document.getElementById("checkall");
-			if(ch.checked){
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=true;	
-				}	
-			}else{
-				for(var i=0;i<alls.length;i++){
-					alls[i].checked=false;	
-				}	
-			}
-		}
-		function delAll(){
-			var alls=document.getElementsByName("check");
-			var ids=new Array();
-			for(var i=0;i<alls.length;i++){
-				if(alls[i].checked){
-					ids.push(alls[i].value);
-				}		
-			}
-			if(ids.length>0){
-				if(confirm("确认操作?")){
-					alert("成功!");
-				}
-			}else{
-				alert("请选中要操作的项");
-			}
-		}
+        $(function () {
+            $('#newNav').click(function () {
+                window.location.href = "{% url 'doctor_manage_add' %}";
+            });
+        });
+
+        function checkall() {
+            var alls = document.getElementsByName("check");
+            var ch = document.getElementById("checkall");
+            if (ch.checked) {
+                for (var i = 0; i < alls.length; i++) {
+                    alls[i].checked = true;
+                }
+            } else {
+                for (var i = 0; i < alls.length; i++) {
+                    alls[i].checked = false;
+                }
+            }
+        }
+
+        function delAll1() {
+            var alls = document.getElementsByName("d_box");
+            var ids = new Array();
+            for (var i = 0; i < alls.length; i++) {
+                if (alls[i].checked) {
+                    ids.push(alls[i].value);
+                }
+            }
+            if (ids.length > 0) {
+
+                if (confirm("确认操作?")) {
+                    $.ajax({
+                        url: "{% url 'doctor_manage_del_box' %}",
+                        type: 'POST',
+                        data: {
+                            ids: ids + ''
+                        },
+                        cache: true,
+                        success: function (data) {
+                            alert(data['status']);
+
+                        }
+                    });
+                }
+            } else {
+                alert("请选中要操作的项");
+            }
+        }
     </script>
 </head>
 <body>
 
-<form action="index.html" method="post" class="definewidth m20">
-<table class="table table-bordered table-hover definewidth m10">
-    <tr>
-        <td width="10%" class="tableleft">医生编号：</td>
-        <td><input type="text" name="pname" value=""/></td>
-		
-        <td width="10%" class="tableleft">医生姓名：</td>
-        <td><input type="text" name="pname" value=""/></td>
-		
-        <td width="10%" class="tableleft">科室：</td>
-        <td><input type="text" name="pname" value=""/></td>
-    </tr>
-    <tr>
-		  <td colspan="6"><center>
-            <button type="submit" class="btn btn-primary" type="button">查询</button> 
-            <button type="submit" class="btn btn-primary" type="button">清空</button> 
-			</center>
-        </td>
-    </tr>
-</table>
-</form>
-   
-<table class="table table-bordered table-hover definewidth m10" >
-   <thead>
-    <tr>
-    	<th><input type="checkbox" id="checkall" onChange="checkall();"></th>
-        <th>医生编号</th>
-        <th>医生姓名</th>
-        <th>入院时间</th>
-        <th>所属科室</th>
-        <th>操作</th>
-    </tr>
-    </thead>
-	     <tr >
-         	<td style="vertical-align:middle;"><input type="checkbox" name="check" value="1"></td>
-            <td style="vertical-align:middle;">1103</td>
-            <td style="vertical-align:middle;">程俊</td>
-            <td style="vertical-align:middle;">2015-09-09 12：12：12</td>
-            <td style="vertical-align:middle;">血液科</td>
-            <td style="vertical-align:middle;"><a href="{% url 'doctor_manage_look' %}">详情>>></a>&nbsp;&nbsp;&nbsp;<a href="{% url 'doctor_manage_edit' %}">更改</a></td>
+{#    查询页面      #}
+<form action="{% url 'doctor_manage_search' %}" method="post">
+    <table class="table table-bordered table-hover definewidth m10">
+        <tr>
+            <td colspan="6">
+                <center>
+            <td>姓名：&nbsp;
+                <input type="text" name="d_content" placeholder="通过姓名查询">
+                <button type="submit"  class="btn btn-success">查询</button>
+            </td>
+            </center>
+            <td>
+                <a href="{% url 'doctor_manage' %}">
+                    <button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+                </a>
+            </td>
+            </td>
         </tr>
+    </table>
+</form>
 
-  </table>
-  
-  <table class="table table-bordered table-hover definewidth m10" >
-  	<tr><th colspan="5">  <div class="inline pull-right page">
-          <a href='#' >第一页</a> <a href='#'>上一页</a>     <span class='current'>1</span><a href='#'>2</a><a href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a>  <a href='#' >下一页</a> <a href='#' >最后一页</a>
-		  &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
-		  </div>
-		 <div><button type="button" class="btn btn-success" id="newNav">添加新医生</button>
-		 <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
-		 </div>
-		 
-		 </th></tr>
-  </table>
-  
+
+{#     查询表格     #}
+{% if name %}
+    <table class="table table-bordered table-hover definewidth m10">
+        <thead>
+        <tr>
+{#            <th>所属科室</th>#}
+            <th>姓名</th>
+            <th>编号</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>状态</th>
+            <th>电话号码</th>
+            <th>操作</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+{#                <td style="vertical-align:middle;">{{ user.doctor_belong_id }}</td>#}
+                <td style="vertical-align:middle;">{{ user.user_name }}</td>
+                <td style="vertical-align:middle;">{{ user.id }}</td>
+                <td style="vertical-align:middle;">{{ user.user_gender }}</td>
+                <td style="vertical-align:middle;">{{ user.user_age }}</td>
+                <td style="vertical-align:middle;">{{ user.user_status }}</td>
+                <td style="vertical-align:middle;">{{ user.user_phone }}</td>
+                <td style="vertical-align:middle;">
+                    <a href="{% url 'doctor_manage_look' user_id=user.id %}">详情</a>
+                    &nbsp;&nbsp;
+                    <a href="{% url 'doctor_manage_edit' user_id=user.id %}">更改</a>
+                    &nbsp;&nbsp;
+                    <a href="{% url 'doctor_manage_del' user_id=user.id %}">删除</a>
+                    &nbsp;&nbsp;
+                    <p></p>
+                </td>
+                <td><input type="checkbox" id="checkall" onChange="checkall();"></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+{% else %}
+    {#           首页表格        #}
+    <table class="table table-bordered table-hover definewidth m10">
+        <tr>
+            <td>
+                {% for department in departments %}
+                    &nbsp;<a href="{% url 'doctor_manage_type_look' id=department.id %}"><input  type="button" value="{{ department.depart_name }}" class="btn btn-success"></a>&nbsp;
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+
+
+
+
+<table class="table table-bordered table-hover definewidth m10">
+<thead>
+<tr>
+    <th>姓名</th>
+{#            <th>科室</th>#}
+    <th>编号</th>
+    <th>性别</th>
+    <th>年龄</th>
+    <th>状态</th>
+    <th>电话号码</th>
+    <th>操作</th>
+    <th></th>
+</tr>
+</thead>
+<tbody>
+    {% for user in users %}
+        <tr>
+            <td style="vertical-align:middle;">{{ user.user_name }}</td>
+{#                    <td style="vertical-align:middle;">{{ user.doctor_belong_id }}</td>#}
+            <td style="vertical-align:middle;">{{ user.id }}</td>
+            <td style="vertical-align:middle;">{{ user.user_gender }}</td>
+            <td style="vertical-align:middle;">{{ user.user_age }}</td>
+            <td style="vertical-align:middle;">{{ user.user_status }}</td>
+            <td style="vertical-align:middle;">{{ user.user_phone }}</td>
+            <td style="vertical-align:middle;">
+                <a href="{% url 'doctor_manage_look' user_id=user.id %}">详情</a>
+                &nbsp;&nbsp;
+                <a href="{% url 'doctor_manage_edit' user_id=user.id %}">更改</a>
+                &nbsp;&nbsp;
+                <a href="{% url 'doctor_manage_del' user_id=user.id %}">删除</a>
+                &nbsp;&nbsp;
+                <p></p>
+            </td>
+            <td><input type="checkbox" id="checkall" onChange="checkall();"></td>
+        </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+
+
+
+
+    <table class="table table-bordered table-hover definewidth m10">
+        <tr>
+            <th colspan="5">
+                <div class="inline pull-right page">
+                    <a href='#'>第一页</a> <a href='#'>上一页</a> <span class='current'>1</span><a href='#'>2</a><a
+                        href='/chinapost/index.php?m=Label&a=index&p=3'>3</a><a href='#'>4</a><a href='#'>5</a> <a
+                        href='#'>下一页</a>
+                    <a href='#'>最后一页</a>
+                    &nbsp;&nbsp;&nbsp;共<span class='current'>32</span>条记录<span class='current'> 1/33 </span>页
+                </div>
+                <div>
+                    {#                        <form action="{% url 'doctor_manage_del_box' %}" method="post">#}
+                    <button type="button" class="btn btn-success" id="delPro" onClick="delAll1();">删除选中
+                    </button>
+                    {#                        </form>#}
+
+                    <a href="#">
+                        <button type="button" class="btn btn-success" id="delPro">导出Excel</button>
+                    </a>
+                </div>
+
+            </th>
+        </tr>
+    </table>
+{% endif %}
 </body>
 </html>

@@ -34,20 +34,22 @@
 
 
     </style>
-    <script type="text/javascript">
-    $(function () {       
-		$('#backid').click(function(){
-				window.location.href="{% url 'medicine_house_index' %}";
-		 });
-    });
-    </script>
+{#    <script type="text/javascript">#}
+{#    $(function () {       #}
+{#		$('#backid').click(function(){#}
+{#				window.location.href="{% url 'medicine_house' %}";#}
+{#		 });#}
+{#    });#}
+{#    </script>#}
 </head>
 <body>
-<form action="medicine_index.html" method="post" class="definewidth m20">
+
+{#<form action="medicine_index.html" method="post" class="definewidth m20">#}
+<form action="{% url 'medicine_detail' mid=med2.id %}" method="post" class="definewidth m20">
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
-        <td width="10%" class="tableleft">药品编号</td>
-        <td>J6764</td>
+        <td width="10%" class="tableleft">编号</td>
+        <td>{{ med2.id }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">图片</td>
@@ -55,32 +57,32 @@
     </tr>
     <tr>
         <td width="10%" class="tableleft">进价</td>
-        <td>2元</td>
+        <td>{{ med2.medicine_enter_price }}元</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">售价</td>
-        <td>128.9元</td>
+        <td>{{ med2.medicine_outer_price }}元</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">药品名称</td>
-        <td>感冒药</td>
+        <td>{{ med2.medicine_name }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">药品类型</td>
-        <td>处方药</td>
+        <td>{{ med2.fk_medicine_type_department }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">简单描述</td>
-        <td>用于普通感冒</td>
+        <td>{{ med2.medicine_message }}</td>
     </tr>
 
     <tr>
         <td width="10%" class="tableleft">过期日期</td>
-        <td>2016年01月01日</td>
+        <td>2020年12月24日</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">详细描述</td>
-        <td>该药仅用于普通的流行性感冒,孕妇小孩慬用……</td>
+        <td>{{ med2.medicine_message }}</td>
     </tr>
     <tr>
         <td width="10%" class="tableleft">生产厂商</td>
@@ -91,12 +93,19 @@
         <td>一次两粒一日三次</td>
     </tr>
     <tr>
-        <td width="10%" class="tableleft">库存</td>
-        <td>3000袋</td>
+        {% if med3 %}
+            <td width="10%" class="tableleft">库存</td>
+        <td>{{med3}}</td>
+            {% else %}
+            <td width="10%" class="tableleft">库存</td>
+        <td>{{med2.medicine_number}}袋</td>
+
+        {% endif %}
+
     </tr>
     <tr>
         <td width="10%" class="tableleft">剩余量</td>
-        <td>1000袋</td>
+        <td>{{ med2.medicine_number }}袋</td>
     </tr>
 	<tr>
         <td width="10%" class="tableleft">备注</td>
@@ -105,8 +114,9 @@
     <tr>
         <td colspan="2">
 			<center>
-				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
-			</center
+{#				<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>#}
+                <a href="{% url 'medicine_house' %}" style="list-style: none;"><button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button></a>
+			</center>
 		</td>
     </tr>
 </table>

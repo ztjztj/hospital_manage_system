@@ -34,15 +34,18 @@
 
 
     </style>
-    <script>
-    $(function () {       
-		$('#backid').click(function(){
-				window.location.href="{% url 'administrator_index' %}";
-		 });
-    });
-</script>
+{#    <script>#}
+{#    $(function () {       #}
+{#		$('#backid').click(function(){#}
+{#				window.location.href="{% url 'administrator_index' %}";#}
+{#		 });#}
+{#    });#}
+{#</script>#}
 </head>
 <body>
+<p>添加用户页面</p>
+{#<a href="{% url 'start_and_stop' %}">用户的启用与禁用</a>#}
+
 <form action="index.html" method="post" class="definewidth m20">
 <input type="hidden" name="id" value="{$user.id}" />
     <table class="table table-bordered table-hover definewidth m10">
@@ -83,10 +86,43 @@
         <tr>
             <td class="tableleft"></td>
             <td>
-                <button type="submit" class="btn btn-primary" type="button">更新</button>&nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>
+{#                <button type="submit" class="btn btn-primary" type="button">更新</button>&nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>#}
+                <center>
+                    <input type="submit" value="确认添加">
+
+                </center>
             </td>
         </tr>
     </table>
 </form>
+<center>
+<a href="{% url 'user_manage' %}"><input type="submit" value="返回列表"></a>
+</center>
+
+{#{% endfor %}#}
+
+{#    <tr>#}
+{#        <td colspan="2">#}
+{#			<center>#}
+{#				<button type="submit" class="btn btn-primary" type="button">保存</button> &nbsp;&nbsp;<button type="button" class="btn btn-success" name="backid" id="backid">返回列表</button>#}
+{#			</center>#}
+{#		</td>#}
+{#    </tr>#}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>
