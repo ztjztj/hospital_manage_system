@@ -105,12 +105,15 @@ def enter_add(request):
 
         patient_money = request.POST.get('pmoney')
         print(patient_money)
-        # print('patient_money',patient_money)
+
         if patient_money != '':
-            a = Money.objects.get_or_create(fk_patientone_id=patient_card)
-            print(a)
-            a.collect_money = int(patient_money)
-            a.save()
+            b = Medicine_one.objects.get(fk_patient_medicine_one=patient_card)
+            medicine_name = b.medicine_one_name
+            c = Medicine.objects.get(medicine_name=medicine_name)
+            money_source = str(b.medicine_one_number) + b.medicine_one_name + '一共花费了' + str(
+                b.medicine_one_number * b.medicine_one_outer_price)
+            money_profit = b.medicine_one_number * b.medicine_one_outer_price - b.medicine_one_number * c.medicine_enter_price+int(patient_money)
+            a = Money.objects.create(fk_patientone_id=patient_card,source=money_source,profit=money_profit,collect_money=int(patient_money),is_hospital=main_details.patient_is_live,collect_time=main_details.patient_one_outer_time)
         else:
             pass
 
